@@ -6,9 +6,11 @@ import com.lpp.beans.LogBean;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -71,13 +73,12 @@ public class ActionLogGen {
                 @Override
                 public void run() {
 
-//                    Properties props = new Properties();
-//                    props.setProperty("bootstrap.servers", "hdp01:9092,hdp02:9092,hdp03:9092");
-//                    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-//                    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-//                    // 构造一个kafka生产者客户端
-//                    KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(props);
-
+                    Properties props = new Properties();
+                    props.setProperty("bootstrap.servers", "10.12.0.168:9092,10.12.0.166:9092,10.12.0.164:9092");
+                    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+                    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+                    // 构造一个kafka生产者客户端
+                    KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(props);
                     while (true) {
                         LogBean logBean = new LogBean();
                         // 生成的账号形如： 004078
@@ -116,8 +117,10 @@ public class ActionLogGen {
                          System.out.println(log);
                         // 写入kafka的topic： yinew_applog
 //
-//                        ProducerRecord<String, String> record = new ProducerRecord<>("yinew_applog", log);
-//                        kafkaProducer.send(record);
+                        ProducerRecord<String, String> record = new ProducerRecord<>("user_log", log);
+                        kafkaProducer.send(record);
+
+
 
                         try {
                             Thread.sleep(RandomUtils.nextInt(500, 1500));
