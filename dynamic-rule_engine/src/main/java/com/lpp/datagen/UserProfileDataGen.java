@@ -33,19 +33,19 @@ public class UserProfileDataGen {
     public static void main(String[] args) throws IOException {
 
         Configuration conf = new Configuration();
-        conf.set("hbase.zookeeper.quorum","hdp01:2181,hdp02:2181,hdp03:2181");
+        conf.set("hbase.zookeeper.quorum","10.12.0.168:2181,10.12.0.166:2181,10.12.0.164:2181");
 
         Connection conn = ConnectionFactory.createConnection(conf);
-        Table table = conn.getTable(TableName.valueOf("yinew_profile"));
-
-        for(int i=1;i<1000000;i++){
+        Table table = conn.getTable(TableName.valueOf("user_profile"));
+        //用户id
+        for(int i=1;i<10000;i++){
 
             ArrayList<Put> puts = new ArrayList<>();
 
             // 攒满20条一批
             for(int j=0;j<20;j++) {
 
-                // 生成一个用户的画像标签数据
+                // 生成一个用户的画像标签数据,字段000645
                 String deviceId = StringUtils.leftPad(i + "", 6, "0");
                 Put put = new Put(Bytes.toBytes(deviceId));
                 for (int k = 1; k <= 1000; k++) {
